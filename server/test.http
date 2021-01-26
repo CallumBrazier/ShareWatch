@@ -1,0 +1,18 @@
+# POST http://localhost:3001/users/signup
+# Content-Type: application/json
+
+# {
+#     "fullName": "Cal",
+#     "email": "braziercallum2@gmail.com",
+#     "password": "words",
+#     "passwordCheck": "words",
+    
+# }
+
+POST http://localhost:3001/users/login
+Content-Type: application/json
+
+{
+    "email": "1234@gmail.com",
+    "password": "12345"
+}

@@ -1,0 +1,17 @@
+.glass {
+  min-height: 80vh;
+  width: 80%;
+  background: linear-gradient(
+    to right bottom,
+    rgba(255, 255, 255, 0.7),
+    rgba(255, 255, 255, 0.3)
+  );
+  border-radius: 3em;
+  backdrop-filter: blur(2rem);
+}
+
+.account-title {
+  width: 100%;
+  color: #658ec6;
+  text-align: center;
+}

@@ -1,0 +1,72 @@
+@import url("https://fonts.googleapis.com/css2?family=Orbitron&display=swap");
+
+body {
+  background: linear-gradient(to top right, #65dfc9, #6cdbeb);
+}
+
+.topNav {
+  font-family: "Orbitron", sans-serif;
+  width: 100%;
+  font: calc(5px + 2vmin);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+  text-transform: uppercase;
+  position: top;
+  color: white;
+}
+
+.logo {
+  color: white;
+}
+
+.navLinks {
+  color: white;
+  align-self: center;
+}
+
+.navBar-link {
+  display: inline-block;
+  font-size: 1em;
+  list-style: none;
+  text-decoration: none;
+  color: white;
+}
+
+.navBar-link:hover {
+  text-decoration: none;
+}
+
+.mid-link {
+  padding: 0 4em 0 4em;
+}
+
+.sign {
+  align-items: center;
+  color: white;
+  margin: 0;
+  font-size: 1em;
+  align-self: center;
+}
+
+.modalOpenButtons {
+  font-size: 0.8em;
+  margin: 0;
+  border: none;
+  background: none;
+  color: white;
+}
+
+.modalOpenButtons:hover {
+  cursor: pointer;
+}
+
+.modalOpenButtons:focus {
+  border: none;
+  outline: 0;
+}
+
+.main-logo {
+  margin: 1em 0 2em 0;
+}

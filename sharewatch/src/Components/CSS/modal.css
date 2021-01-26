@@ -1,0 +1,145 @@
+@font-face {
+  font-family: nunito;
+  src: url(https://fonts.google.com/specimen/Nunito);
+}
+
+@font-face {
+  font-family: OpenSans;
+  src: url(https://fonts.google.com/specimen/Open+Sans);
+}
+
+.modal {
+  display: inline-block;
+  text-align: center;
+  white-space: nowrap;
+  background: linear-gradient(to bottom left, #65dfc9, #6cdbeb);
+  padding: 2em 1em 2em 1em;
+  border-radius: 1em;
+  width: 15em;
+  height: 25em;
+}
+
+.modal-wrapper {
+  text-align: center;
+  outline: none;
+  margin-top: 1rem;
+  overflow-y: auto;
+  max-height: 100vh;
+}
+
+.modal-input {
+  margin-bottom: 2em;
+  border-radius: 0.5em;
+  border: 1px solid#A29F9F;
+  font-family: OpenSans;
+  color: #a5a5a5;
+  padding: 0.2em;
+}
+
+.loginPic {
+  width: 70%;
+  height: auto;
+}
+
+.modal-title {
+  font-family: "Roboto", sans-serif;
+  color: White;
+  margin: 0;
+  font-weight: bolder;
+  margin: 0.5em 0 0 0;
+}
+
+.modal-context-active {
+  font-family: OpenSans;
+  color: #707070;
+  border-bottom: 2px solid #0075a2;
+  display: inline-block;
+  margin-right: 20px;
+}
+
+.modal-context-active2 {
+  font-family: OpenSans;
+  color: #707070;
+  border-bottom: 2px solid #9cf6f6;
+  display: inline-block;
+  margin-left: 20px;
+}
+
+.modal-context-inactive {
+  font-family: OpenSans;
+  color: #acacac;
+  display: inline-block;
+}
+
+.modal-context-inactive:hover {
+  cursor: pointer;
+}
+
+.signinButton {
+  background-color: #9cf6f6;
+  color: #0075a2;
+  width: 10em;
+  height: 2em;
+  border-radius: 0.25em;
+  border: none;
+  font-weight: bolder;
+}
+
+.loginButton {
+  background-color: #9cf6f6;
+  color: #0075a2;
+  width: 10em;
+  height: 2em;
+  border-radius: 0.25em;
+  border: none;
+  font-weight: bolder;
+}
+
+.signinButton:hover,
+.loginButton:hover {
+  cursor: pointer;
+}
+
+.signinButton:focus,
+.loginButton:focus {
+  outline: none;
+}
+
+.fontAwesomeCross {
+  position: absolute;
+  float: right;
+  margin-left: 3em;
+  margin-top: -0.5em;
+  color: #707070;
+}
+
+.fontAwesomeCross:hover {
+  cursor: pointer;
+}
+
+.error-notice {
+  display: flex;
+  background: linear-gradient(
+    to top right,
+    rgba(245, 70, 70, 0.7),
+    rgba(245, 70, 70, 0.3)
+  );
+  border-radius: 8px;
+  border: 1px solid #e07c7c;
+  margin: 0 0 1em 0;
+  padding: 0.25em 1em;
+  font-size: 75%;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.error-notice button {
+  color: #ffffff;
+  border-radius: 50%;
+  border: 1px solid red;
+  background: #d43343;
+  text-align: center;
+  margin: 0 0 0 1em;
+  width: 20px;
+  height: 20px;
+}

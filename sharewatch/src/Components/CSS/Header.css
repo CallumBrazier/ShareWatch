@@ -1,0 +1,52 @@
+.investButton {
+  background-color: #f3c178;
+  padding: 1em 2em;
+  border-radius: 1em;
+  color: #0f3a74;
+  border: 0.25em solid #f1a532;
+  font-family: "Orbitron", sans-serif;
+  font-size: 1em;
+  margin: 1em 0 0 0;
+}
+
+.investButton:focus {
+  outline: none;
+}
+
+.investButton:hover {
+  cursor: pointer;
+}
+
+.header {
+  width: 100%;
+  color: #658ec6;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  margin: auto;
+}
+
+.header-title {
+  font-family: "Orbitron", sans-serif;
+  font-size: 3em;
+  color: #426696;
+}
+
+.header-left {
+  display: flex;
+  flex-flow: column nowrap;
+  margin-top: 4em;
+  width: 40%;
+}
+
+.header-right {
+  display: flex;
+  justify-content: center;
+  margin-left: 4em;
+  width: 40%;
+}
+
+.iphone-image {
+  width: 22em;
+  height: auto;
+}
