@@ -1,0 +1,89 @@
+.stock-logo {
+  width: 4em;
+  height: 4em;
+  margin-right: 1em;
+}
+
+.stockcard-top {
+  display: flex;
+  flex-direction: row;
+  margin: 0 0 1em 0;
+}
+
+.stockcard-top-title {
+  display: flex;
+  flex-direction: column;
+}
+
+.favourite-button {
+}
+
+.title-main {
+  color: rgb(75, 73, 73);
+}
+
+.title-second {
+  color: rgb(70, 70, 70);
+}
+
+.stockcard-main {
+  display: flex;
+  justify-content: space-between;
+}
+
+.stockcard-main-right {
+  display: flex;
+}
+
+.stockcard-main-columns {
+  display: flex;
+  justify-content: space-between;
+}
+
+.stockcard-main-column-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.stockcard-main-column-right {
+  display: flex;
+  flex-direction: column;
+}
+
+.stockcard-value-header {
+  font-size: 1em;
+}
+
+.stockcard-value {
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.radio {
+  display: inline-flex;
+  overflow: hidden;
+  border-radius: 15px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+  margin: 2rem 0 1rem 0;
+}
+
+.radio__input {
+  display: none;
+}
+
+.radio__label {
+  padding: 8px 14px;
+  font-size: 14px;
+  color: white;
+  background: #5e6779;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.radio__label:not(:last-of-type) {
+  border-right: 1px solid #465677;
+}
+
+.radio__input:checked + .radio__label {
+  background: #465677;
+}

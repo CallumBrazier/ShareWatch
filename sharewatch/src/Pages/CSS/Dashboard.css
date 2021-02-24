@@ -15,3 +15,26 @@
   color: #658ec6;
   text-align: center;
 }
+
+/* .circle,
+.circle-right,
+.circle-left,
+.circle-mid,
+.circle-bottom {
+  width: 15rem;
+  height: 15rem;
+  border-radius: 50%;
+  position: absolute;
+  z-index: -1;
+  top: -50%;
+} */
+
+/* .circle {
+  right: 2%;
+  background: linear-gradient(
+    to right bottom,
+    rgba(75, 248, 7, 0.7),
+    rgba(75, 248, 7, 0.3)
+  );
+  animation: circle-move 25s ease-in-out 1s infinite;
+} */

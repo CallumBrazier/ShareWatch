@@ -70,14 +70,14 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.delete("/delete", auth, async (req, res) => {
-  try {
-    const deletedUser = await User.findByIdAndDelete(req.user);
-    res.json(deletedUser);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+// router.delete("/delete", auth, async (req, res) => {
+//   try {
+//     const deletedUser = await User.findByIdAndDelete(req.user);
+//     res.json(deletedUser);
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// });
 
 router.post("/tokenIsValid", async (req, res) => {
   try {

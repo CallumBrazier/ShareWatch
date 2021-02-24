@@ -15,14 +15,12 @@ export default function Search() {
 
   const getQuery = (e) => {
     setSearch(e.target.value);
-    console.log("search:", search);
   };
 
   const getSearch = (e) => {
     e.preventDefault();
     setQuery(search);
     setSearch("");
-    console.log("query:", query);
   };
 
   return (
@@ -31,7 +29,7 @@ export default function Search() {
         <Navbar />
         <div className="header glass">
           <div className="account-title">
-            <h3>Search for securities and coins!</h3>
+            <h3>Search for your favourite USD securities!</h3>
             <form onSubmit={getSearch}>
               <input
                 type="text"

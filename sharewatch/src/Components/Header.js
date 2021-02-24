@@ -34,6 +34,12 @@ export default function Header({ handleOpen }) {
         </div>
       </div>
 
+      {/* <div className="circle-left"></div>
+      <div className="circle-right"></div>
+      <div className="circle-mid"></div>
+      <div className="circle-bottom"></div>
+      <div className="circle"></div> */}
+
       <div className="disclaimer">
         <h6 className="disclaimer-text">
           *Investing involves risk. You aren’t guaranteed to make money, and you
