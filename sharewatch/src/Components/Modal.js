@@ -191,7 +191,7 @@ const Body2 = ({ handleClose, handleClick }) => {
         </form>
 
         <button className="loginButton" variant="contained" onClick={login}>
-          Begin investing!
+          Start investing!
         </button>
       </div>
     </div>

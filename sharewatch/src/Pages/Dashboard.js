@@ -12,7 +12,6 @@ dotenv.config();
 const Dashboard = () => {
   const { user } = useContext(UserContext);
   const [followedStocks, setFollowedStocks] = useState([]);
-  const [apiList, setApiList] = useState([]);
 
   const favouriteStocks = async () => {
     let id = user.user.id;
@@ -30,6 +29,7 @@ const Dashboard = () => {
             stockArray.push(favs[i].ticker);
           }
           setFollowedStocks([...stockArray]);
+          console.log(followedStocks);
         }
       }
     );
@@ -46,24 +46,24 @@ const Dashboard = () => {
         <div className="header glass">
           <div className="account-title">
             <h1>Welcome, {user.user.fullName}!</h1>
-            <div>
-              {followedStocks.length > 0 ? (
-                followedStocks.map((ticker) => {
-                  return (
-                    <div>
-                      <p>{ticker}</p>
-                    </div>
-                  );
-                })
-              ) : (
-                <div>
-                  <h3>
-                    You are not following any stocks!{" "}
-                    <NavLink to="/search">Click here to get searching!</NavLink>
-                  </h3>
-                </div>
-              )}
-            </div>
+          </div>
+          <div className="dashboard">
+            {followedStocks.length > 0 ? (
+              followedStocks.map((ticker) => {
+                return (
+                  <div className="dashboard-card">
+                    <DashboardCard query={ticker} />
+                  </div>
+                );
+              })
+            ) : (
+              <div>
+                <h3>
+                  You are not following any stocks!{" "}
+                  <NavLink to="/search">Click here to get searching!</NavLink>
+                </h3>
+              </div>
+            )}
           </div>
         </div>
       </body>

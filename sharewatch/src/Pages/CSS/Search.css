@@ -1,0 +1,39 @@
+.searchbar {
+  display: inline-block;
+  width: 50%;
+  height: 42.5px;
+  padding: 0.1em 1em;
+  font-size: 1em;
+  color: gray;
+  background-color: white;
+  border-radius: 1em 0 0 1em;
+  border: none;
+  margin: 0 0 1em 0;
+}
+
+.searchbar:focus,
+#searchbutton:focus {
+  outline: none;
+  background-color: white;
+}
+
+input[type="search"]:focus {
+  outline: none;
+}
+
+#searchbutton:hover {
+  cursor: pointer;
+  color: rgb(37, 187, 247);
+}
+
+#searchbutton {
+  vertical-align: top;
+  display: inline-block;
+  width: 42.5px;
+  height: 42.5px;
+  border: none;
+  border-radius: 0 50% 50% 0;
+  color: #07051a;
+  text-align: center;
+  background-color: white;
+}

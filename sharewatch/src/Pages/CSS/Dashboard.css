@@ -13,28 +13,30 @@
 .account-title {
   width: 100%;
   color: #658ec6;
+  font-size: 1.5rem;
+  margin: 1em 0 1em 0;
   text-align: center;
 }
 
-/* .circle,
-.circle-right,
-.circle-left,
-.circle-mid,
-.circle-bottom {
-  width: 15rem;
-  height: 15rem;
-  border-radius: 50%;
-  position: absolute;
-  z-index: -1;
-  top: -50%;
-} */
+.dashboard {
+  display: flex;
+  width: 78%;
+  justify-content: space-around;
+  margin: 0 0 2em 0;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: flex-start;
+}
 
-/* .circle {
-  right: 2%;
-  background: linear-gradient(
-    to right bottom,
-    rgba(75, 248, 7, 0.7),
-    rgba(75, 248, 7, 0.3)
-  );
-  animation: circle-move 25s ease-in-out 1s infinite;
+.stockcard-container {
+  margin: 0 0 1em 0;
+}
+
+/* .dashboard {
+  display: grid;
+  width: 2fr;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(autofill, 2fr);
+  grid-auto-flow: row;
+  grid-gap: 20px 20px;
 } */

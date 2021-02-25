@@ -2,6 +2,7 @@
   width: 4em;
   height: 4em;
   margin-right: 1em;
+  object-fit: cover;
 }
 
 .stockcard-top {
@@ -16,6 +17,16 @@
 }
 
 .favourite-button {
+  color: rgb(37, 187, 247);
+  width: 50px;
+  height: 50px;
+}
+
+/* //#2469f0; */
+
+.favourite-button-icon {
+  font-size: 1.5em;
+  color: rgb(37, 187, 247);
 }
 
 .title-main {
@@ -23,31 +34,39 @@
 }
 
 .title-second {
-  color: rgb(70, 70, 70);
+  color: rgb(75, 73, 73);
 }
 
 .stockcard-main {
   display: flex;
   justify-content: space-between;
+  color: rgb(75, 73, 73);
+  margin: 0 0 1em 0;
+  /* border-bottom: 1px solid gray; */
 }
 
 .stockcard-main-right {
   display: flex;
+  color: rgb(75, 73, 73);
 }
 
 .stockcard-main-columns {
   display: flex;
+  color: rgb(75, 73, 73);
   justify-content: space-between;
+  border-top: 1px solid gray;
 }
 
 .stockcard-main-column-left {
   display: flex;
   flex-direction: column;
+  margin: 1em 0 0 0;
 }
 
 .stockcard-main-column-right {
   display: flex;
   flex-direction: column;
+  margin: 1em 0 0 0;
 }
 
 .stockcard-value-header {
@@ -59,12 +78,16 @@
   font-weight: bold;
 }
 
+.stockcard-value:not(:last-of-type) {
+  margin: 0 0 1em 0;
+}
+
 .radio {
   display: inline-flex;
   overflow: hidden;
   border-radius: 15px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
-  margin: 2rem 0 1rem 0;
+  margin: 0rem 0 1rem 0;
 }
 
 .radio__input {
@@ -75,15 +98,54 @@
   padding: 8px 14px;
   font-size: 14px;
   color: white;
-  background: #5e6779;
+  background: rgb(99, 205, 247);
   cursor: pointer;
   transition: background 0.1s;
 }
 
 .radio__label:not(:last-of-type) {
-  border-right: 1px solid #465677;
+  border-right: 1px solid rgb(37, 187, 247);
 }
 
 .radio__input:checked + .radio__label {
-  background: #465677;
+  background: rgb(37, 187, 247);
+}
+
+.stockcard {
+  margin: 0 0 2em 0;
+}
+
+.graph-button {
+  margin: 0em 1em 0.75em 0.5em;
+  padding: 0.5em 1em;
+  border: none;
+  color: white;
+  font-weight: bold;
+  background-color: rgb(37, 187, 247);
+  border: 2px solid rgb(0, 119, 255);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.graph-button:focus {
+  outline: none;
+}
+
+.trend-icon {
+  color: rgb(37, 187, 247);
+  margin: 0 0 0 0.2em;
+}
+
+.stockcard-main-right-change-profit {
+  margin: 0 0.2em 0 0;
+  color: rgb(40, 202, 49);
+}
+
+.stockcard-main-right-change-loss {
+  margin: 0 0.2em 0 0;
+  color: rgb(221, 44, 44);
+}
+
+.stockcard-main-right-percentchange {
+  margin: 0 0 0 0.2em;
 }

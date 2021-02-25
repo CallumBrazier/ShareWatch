@@ -1,8 +1,14 @@
 import React, { useState, useEffect, useContext } from "react";
 import Axios from "axios";
 
-import "./CSS/Card.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faArrowAltCircleUp,
+  faArrowAltCircleDown,
+} from "@fortawesome/free-solid-svg-icons";
 
+import "./CSS/Card.css";
+import UserContext from "../Context/UserContext";
 import LineGraph from "./Graph";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -13,11 +19,7 @@ import Collapse from "@material-ui/core/Collapse";
 import IconButton from "@material-ui/core/IconButton";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
-import TrendingUpIcon from "@material-ui/icons/TrendingUp";
-import TrendingDownIcon from "@material-ui/icons/TrendingDown";
 import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import UserContext from "../Context/UserContext";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -180,6 +182,31 @@ export default function StockCard({ query }) {
 
   useEffect(() => {
     const currentdate = Math.round(new Date().getTime() / 1000);
+    const daybefore = currentdate - 86400;
+    const int = "1";
+    async function firstAPICall() {
+      await fetch(
+        `https://finnhub.io/api/v1/stock/candle?symbol=${query}&resolution=${int}&from=${daybefore}&to=${currentdate}&token=${process.env.REACT_APP_FH_API_KEY}`
+      )
+        .then((response) => response.json())
+        .then((candleData) => {
+          setStockHistory(candleData.c);
+          setGraphData(candleData.t);
+          setTimeData(
+            graphData &&
+              graphData.map((data) => {
+                let date = new Date(data * 1000);
+                return date.toLocaleString();
+              })
+          );
+          console.log("firstAPICall time data", timeData);
+        });
+    }
+    firstAPICall();
+  }, []);
+
+  useEffect(() => {
+    const currentdate = Math.round(new Date().getTime() / 1000);
     setUnixtime(currentdate - 86400);
 
     if (timeframe === "1D") {
@@ -220,9 +247,6 @@ export default function StockCard({ query }) {
         .then((candleData) => {
           setStockHistory(candleData.c);
           setGraphData(candleData.t);
-          console.log("FH-Stock-History", stockHistory);
-          console.log("FH-GraphData", graphData);
-
           setTimeData(
             graphData &&
               graphData.map((data) => {
@@ -230,14 +254,15 @@ export default function StockCard({ query }) {
                 return date.toLocaleString();
               })
           );
+          console.log("FH-Stock-History", stockHistory);
+          console.log("FH-GraphData", graphData);
         });
     }
-
     getStockHistory();
   }, [timeframe]);
 
   return (
-    <div>
+    <div className="stockcard">
       <Card className={classes.root}>
         <CardContent>
           <div className="stockcard-top">
@@ -253,29 +278,46 @@ export default function StockCard({ query }) {
               onClick={favouriteStock}
               className="favourite-button"
             >
-              {favourite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+              {favourite ? (
+                <FavoriteIcon className="favourite-button-icon" />
+              ) : (
+                <FavoriteBorderIcon className="favourite-button-icon" />
+              )}
             </IconButton>
           </div>
           <div className="stockcard-main">
-            <h4>
+            <h3>
               ${stock.c} {company.currency}
-            </h4>
+            </h3>
             <div className="stockcard-main-right">
-              <h4>
+              <h3
+                className={
+                  stock.c - stock.pc > 0
+                    ? "stockcard-main-right-change-profit"
+                    : "stockcard-main-right-change-loss"
+                }
+              >
                 {stock.c - stock.pc > 0
                   ? `+${(stock.c - stock.pc).toFixed(2)}`
                   : `${(stock.c - stock.pc).toFixed(2)}`}
-              </h4>{" "}
-              <h4>
+              </h3>
+              <h3>|</h3>
+              <h3 className="stockcard-main-right-percentchange">
+                {`${(((stock.c - stock.pc) / stock.pc) * 100).toFixed(2)}%`}
+              </h3>
+              <h3>
                 {stock.c - stock.pc > 0 ? (
-                  <TrendingUpIcon />
+                  <FontAwesomeIcon
+                    icon={faArrowAltCircleUp}
+                    className="trend-icon"
+                  />
                 ) : (
-                  <TrendingDownIcon />
+                  <FontAwesomeIcon
+                    icon={faArrowAltCircleDown}
+                    className="trend-icon"
+                  />
                 )}
-              </h4>
-              <h4>
-                | {`${(((stock.c - stock.pc) / stock.pc) * 100).toFixed(2)}%`}
-              </h4>
+              </h3>
             </div>
           </div>
           <div className="stockcard-main-columns">
@@ -295,120 +337,136 @@ export default function StockCard({ query }) {
               <p className="stockcard-value-header">Market Cap</p>
               <p className="stockcard-value">
                 {company.marketCapitalization > 999999
-                  ? `${company.marketCapitalization / 1000000}T`
-                  : `${company.marketCapitalization / 1000}B`}
+                  ? `${(company.marketCapitalization / 1000000).toFixed(2)}T`
+                  : `${(company.marketCapitalization / 1000).toFixed(2)}B`}
               </p>
+
               <p className="stockcard-value-header">52 Week Range</p>
               <p className="stockcard-value">
-                {metrics
-                  ? `${metrics.metric["52WeekLow"]}-${metrics.metric["52WeekHigh"]}`
+                {metrics && metrics.metric
+                  ? `${metrics.metric["52WeekLow"].toFixed(2)}-${metrics.metric[
+                      "52WeekHigh"
+                    ].toFixed(2)}`
                   : null}
               </p>
             </div>
           </div>
-          <div className="radio">
-            <input
-              type="radio"
-              name="myRadio"
-              value="1D"
-              id="1D"
-              className="radio__input"
-              checked={timeframe === "1D"}
-              onClick={() => {
-                setTimeframe("1D");
-              }}
-            />
-            <label for="1D" className="radio__label">
-              1D
-            </label>
-            <input
-              type="radio"
-              name="myRadio"
-              value="1W"
-              id="1W"
-              className="radio__input"
-              checked={timeframe === "1W"}
-              onClick={() => {
-                setTimeframe("1W");
-              }}
-            />
-            <label for="1W" className="radio__label">
-              1W
-            </label>
-            <input
-              type="radio"
-              name="myRadio"
-              value="1M"
-              id="1M"
-              className="radio__input"
-              checked={timeframe === "1M"}
-              onClick={() => {
-                setTimeframe("1M");
-              }}
-            />
-            <label for="1M" className="radio__label">
-              1M
-            </label>
-            <input
-              type="radio"
-              name="myRadio"
-              value="3M"
-              id="3M"
-              className="radio__input"
-              checked={timeframe === "3M"}
-              onClick={() => {
-                setTimeframe("3M");
-              }}
-            />
-            <label for="3M" className="radio__label">
-              3M
-            </label>
-            <input
-              type="radio"
-              name="myRadio"
-              value="6M"
-              id="6M"
-              className="radio__input"
-              checked={timeframe === "6M"}
-              onClick={() => {
-                setTimeframe("6M");
-              }}
-            />
-            <label for="6M" className="radio__label">
-              6M
-            </label>
-            <input
-              type="radio"
-              name="myRadio"
-              value="1Y"
-              id="1Y"
-              className="radio__input"
-              checked={timeframe === "1Y"}
-              onClick={() => {
-                setTimeframe("1Y");
-              }}
-            />
-            <label for="1Y" className="radio__label">
-              1Y
-            </label>
-            <input
-              type="radio"
-              name="myRadio"
-              value="5Y"
-              id="5Y"
-              className="radio__input"
-              checked={timeframe === "5Y"}
-              onClick={() => {
-                setTimeframe("5Y");
-              }}
-            />
-            <label for="5Y" className="radio__label">
-              5Y
-            </label>
-          </div>
-
-          <LineGraph stockHistory={stockHistory} graphData={timeData} />
         </CardContent>
+        <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <CardContent>
+            <div className="radio">
+              <input
+                type="radio"
+                name="myRadio"
+                value="1D"
+                id="1D"
+                className="radio__input"
+                checked={timeframe === "1D"}
+                onClick={() => {
+                  setTimeframe("1D");
+                }}
+              />
+              <label for="1D" className="radio__label">
+                1D
+              </label>
+              <input
+                type="radio"
+                name="myRadio"
+                value="1W"
+                id="1W"
+                className="radio__input"
+                checked={timeframe === "1W"}
+                onClick={() => {
+                  setTimeframe("1W");
+                }}
+              />
+              <label for="1W" className="radio__label">
+                1W
+              </label>
+              <input
+                type="radio"
+                name="myRadio"
+                value="1M"
+                id="1M"
+                className="radio__input"
+                checked={timeframe === "1M"}
+                onClick={() => {
+                  setTimeframe("1M");
+                }}
+              />
+              <label for="1M" className="radio__label">
+                1M
+              </label>
+              <input
+                type="radio"
+                name="myRadio"
+                value="3M"
+                id="3M"
+                className="radio__input"
+                checked={timeframe === "3M"}
+                onClick={() => {
+                  setTimeframe("3M");
+                }}
+              />
+              <label for="3M" className="radio__label">
+                3M
+              </label>
+              <input
+                type="radio"
+                name="myRadio"
+                value="6M"
+                id="6M"
+                className="radio__input"
+                checked={timeframe === "6M"}
+                onClick={() => {
+                  setTimeframe("6M");
+                }}
+              />
+              <label for="6M" className="radio__label">
+                6M
+              </label>
+              <input
+                type="radio"
+                name="myRadio"
+                value="1Y"
+                id="1Y"
+                className="radio__input"
+                checked={timeframe === "1Y"}
+                onClick={() => {
+                  setTimeframe("1Y");
+                }}
+              />
+              <label for="1Y" className="radio__label">
+                1Y
+              </label>
+              <input
+                type="radio"
+                name="myRadio"
+                value="5Y"
+                id="5Y"
+                className="radio__input"
+                checked={timeframe === "5Y"}
+                onClick={() => {
+                  setTimeframe("5Y");
+                }}
+              />
+              <label for="5Y" className="radio__label">
+                5Y
+              </label>
+            </div>
+
+            <LineGraph stockHistory={stockHistory} graphData={timeData} />
+          </CardContent>
+        </Collapse>
+        <CardActions>
+          <button
+            size="small"
+            className="graph-button"
+            onClick={handleExpandClick}
+          >
+            {!expanded ? "Show Graphs" : "Hide Graphs"}
+          </button>
+        </CardActions>
       </Card>
     </div>
   );

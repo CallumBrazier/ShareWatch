@@ -21,7 +21,7 @@ export default function Navbar({ handleOpen, handleOpen2 }) {
           <div className="navLinks">
             <ul>
               <NavLink to="/dashboard" className="navBar-link">
-                <li>Home</li>
+                <li>Dashboard</li>
               </NavLink>
               <NavLink to="/search" className="navBar-link mid-link">
                 <li>Search</li>
