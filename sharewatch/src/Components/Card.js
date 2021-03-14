@@ -19,7 +19,6 @@ import Collapse from "@material-ui/core/Collapse";
 import IconButton from "@material-ui/core/IconButton";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
-import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -52,16 +51,22 @@ export default function StockCard({ query }) {
   const [stock, setStock] = useState("");
   const [metrics, setMetrics] = useState("");
   const [stockHistory, setStockHistory] = useState([]);
-  const [expanded, setExpanded] = React.useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const [newsexpanded, setNewsExpanded] = useState(false);
   const [favourite, setFavourite] = useState(false);
   const [timeframe, setTimeframe] = useState("1D");
   const [unixtime, setUnixtime] = useState("");
   const [interval, setInterval] = useState("1");
   const [graphData, setGraphData] = useState([]);
   const [timeData, setTimeData] = useState([]);
+  const [newsData, setNewsData] = useState([]);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
+  };
+
+  const handleExpandClickNews = () => {
+    setNewsExpanded(!newsexpanded);
   };
 
   const favouriteStock = async () => {
@@ -95,27 +100,21 @@ export default function StockCard({ query }) {
   };
 
   useEffect(() => {
-    // async function getCompany() {
-    //   await fetch(
-    //     `https://www.alphavantage.co/query?function=OVERVIEW&symbol=${query}&apikey=${process.env.REACT_APP_API_KEY}`
-    //   )
-    //     .then((response) => response.json())
-    //     .then((companyInfo) => {
-    //       setCompany(companyInfo);
-    //       console.log(companyInfo);
-    //     });
-    // }
+    async function getNews() {
+      const d = new Date();
+      const dateto = d.toISOString().split("T")[0];
+      const datefrom = d.setFullYear(d.getFullYear() + 1);
+      console.log(d, dateto, datefrom);
 
-    // async function getStock() {
-    //   await fetch(
-    //     `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${query}&interval=1min&apikey=${process.env.REACT_APP_API_KEY}`
-    //   )
-    //     .then((response) => response.json())
-    //     .then((stockInfo) => {
-    //       setStock(stockInfo);
-    //       console.log(stockInfo);
-    //     });
-    // }
+      await fetch(
+        `https://finnhub.io/api/v1/company-news?symbol=${query}&from=${datefrom}&to=${dateto}&token=${process.env.REACT_APP_FH_API_KEY}`
+      )
+        .then((response) => response.json())
+        .then((stockNews) => {
+          setNewsData(stockNews);
+          console.log("FH-News-Info", stockNews);
+        });
+    }
 
     async function getStock() {
       await fetch(
@@ -176,6 +175,7 @@ export default function StockCard({ query }) {
     getStock();
     getMetrics();
     getCompany();
+    getNews();
     setFavourite(false);
     getFavourite();
   }, [query]);
@@ -458,14 +458,55 @@ export default function StockCard({ query }) {
             <LineGraph stockHistory={stockHistory} graphData={timeData} />
           </CardContent>
         </Collapse>
+        <Collapse in={newsexpanded} timeout="auto" unmountOnExit>
+          <CardContent>
+            <div>
+              {newsData.slice(0, 3).map((data) => {
+                console.log(data);
+                return (
+                  <div>
+                    <a className="news-link" href={data.url}>
+                      <h2 className="news-headline">{data.headline}</h2>
+                    </a>
+                    <div className="news-summary">
+                      <img
+                        src={data.image}
+                        alt="article image"
+                        className="news-image"
+                      />
+
+                      {/* <h3>{data.datetime}</h3> */}
+
+                      <p className="news-info">{data.summary}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </CardContent>
+        </Collapse>
+
         <CardActions>
-          <button
-            size="small"
-            className="graph-button"
-            onClick={handleExpandClick}
-          >
-            {!expanded ? "Show Graphs" : "Hide Graphs"}
-          </button>
+          <div className="expand-buttons">
+            {newsexpanded ? null : (
+              <button
+                size="small"
+                className="graph-button"
+                onClick={handleExpandClick}
+              >
+                {!expanded ? "Show Graphs" : "Hide Graphs"}
+              </button>
+            )}
+            {expanded ? null : (
+              <button
+                size="small"
+                className="graph-button news-button"
+                onClick={handleExpandClickNews}
+              >
+                {!newsexpanded ? "Show News" : "Hide News"}
+              </button>
+            )}
+          </div>
         </CardActions>
       </Card>
     </div>

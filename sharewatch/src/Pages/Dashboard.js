@@ -6,6 +6,7 @@ import UserContext from "../Context/UserContext";
 import dotenv from "dotenv";
 import Axios from "axios";
 import DashboardCard from "../Components/DashboardCard";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 dotenv.config();
 
@@ -20,16 +21,18 @@ const Dashboard = () => {
     await Axios.post("http://localhost:3001/stocks/allfavourites", data).then(
       (res) => {
         if (res.data.msg) {
-          console.log(res);
+          console.log("res", res);
           console.log(res.data.msg);
           let favs = res.data.favourites;
           console.log(favs);
           let stockArray = [];
           for (let i = 0; i < favs.length; i++) {
-            stockArray.push(favs[i].ticker);
+            stockArray.push({
+              ticker: favs[i].ticker,
+              code: favs[i].uniqueCode,
+            });
           }
           setFollowedStocks([...stockArray]);
-          console.log(followedStocks);
         }
       }
     );
@@ -39,6 +42,16 @@ const Dashboard = () => {
     favouriteStocks();
   }, []);
 
+  const handleOnDragEnd = (result) => {
+    if (!result.destination) return;
+    const items = Array.from(followedStocks);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+    console.log(items);
+    console.log("followedstocks", followedStocks);
+    setFollowedStocks(items);
+  };
+
   return (
     <div>
       <body>
@@ -47,24 +60,46 @@ const Dashboard = () => {
           <div className="account-title">
             <h1>Welcome, {user.user.fullName}!</h1>
           </div>
-          <div className="dashboard">
-            {followedStocks.length > 0 ? (
-              followedStocks.map((ticker) => {
-                return (
-                  <div className="dashboard-card">
-                    <DashboardCard query={ticker} />
-                  </div>
-                );
-              })
-            ) : (
-              <div>
-                <h3>
-                  You are not following any stocks!{" "}
-                  <NavLink to="/search">Click here to get searching!</NavLink>
-                </h3>
-              </div>
-            )}
-          </div>
+          <DragDropContext onDragEnd={handleOnDragEnd}>
+            <Droppable droppableId="characters">
+              {(provided) => (
+                <div
+                  className="dashboard"
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                >
+                  {followedStocks.length > 0 ? (
+                    followedStocks.map(({ ticker, code }, index) => {
+                      return (
+                        <Draggable key={code} draggableId={code} index={index}>
+                          {(provided) => (
+                            <div
+                              className="dashboard-card"
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              ref={provided.innerRef}
+                            >
+                              <DashboardCard query={ticker} />
+                            </div>
+                          )}
+                        </Draggable>
+                      );
+                    })
+                  ) : (
+                    <div>
+                      <h3>
+                        You are not following any stocks!{" "}
+                        <NavLink to="/search">
+                          Click here to get searching!
+                        </NavLink>
+                      </h3>
+                    </div>
+                  )}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
         </div>
       </body>
     </div>

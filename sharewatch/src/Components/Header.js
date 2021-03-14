@@ -1,28 +1,9 @@
 import React, { useState, useEffect } from "react";
 
 import "./CSS/Header.css";
-import iphone from "../images/iphone-graph1.png";
-import iphone2 from "../images/iphone-sw.png";
+import iphone from "../images/iphone-sw.png";
 
 export default function Header({ handleOpen }) {
-  const [image, setImage] = useState(iphone2);
-
-  function carousel() {
-    let x = () => {
-      if (image === iphone2) {
-        setImage(iphone);
-      } else if (image === iphone) {
-        setImage(iphone2);
-      }
-    };
-
-    setTimeout(x, 6000);
-  }
-
-  useEffect(() => {
-    carousel();
-  }, [image]);
-
   return (
     <div className="top-section">
       <div className="header glass">
@@ -32,7 +13,7 @@ export default function Header({ handleOpen }) {
             <br /> It's as easy as 1, 2, 3!
           </h1>
           <p className="header-para">
-            1. Create an{" "}
+            1. Create an
             <a className="clickable-link" onClick={handleOpen}>
               account
             </a>
@@ -49,7 +30,7 @@ export default function Header({ handleOpen }) {
         </div>
 
         <div className="header-right">
-          <img src={image} alt="iphone" className="iphone-image" />
+          <img src={iphone} alt="iphone" className="iphone-image" />
         </div>
       </div>
 

@@ -12,6 +12,7 @@ import Home from "./Pages/Home";
 import Dashboard from "./Pages/Dashboard";
 import Search from "./Pages/Search";
 import UserContext from "./Context/UserContext";
+import Comparison from "./Pages/Comparison";
 
 export default function App() {
   const { checkedLoggedIn } = useContext(UserContext);
@@ -29,6 +30,7 @@ export default function App() {
         <Route path="/dashboard" component={Dashboard} />
         <Route path="/search" component={Search} />
         <Route path="/home" component={Home} />
+        <Route path="/comparison" component={Comparison} />
       </Switch>
     </Router>
   );
