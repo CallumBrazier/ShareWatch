@@ -25,11 +25,12 @@ app.use("/users", routesUrls); //appends route names to /app in url e.g. homepag
 app.use("/stocks", stockRouteUrls);
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static("sharewatch/build"));
+  app.use(express.static(path.join(__dirname, "../sharewatch/build")));
 
-  // app.get("/", (req, res) => {
-  //   res.send("ShareWatch");
-  // });
+  app.get("/", (req, res) => {
+    // res.send("ShareWatch");
+    res.sendFile(path.join(__dirname, "../sharewatch/build", "index.html"));
+  });
 
   app.get("*", (req, res) => {
     res.sendFile(path.resolve(__dirname, "../sharewatch/build", "index.html"));
