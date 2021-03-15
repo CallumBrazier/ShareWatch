@@ -10,6 +10,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import ErrorNotice from "../misc/ErrorNotice";
 
+const port = process.env.PORT || 3001;
+
 const Body = ({ handleClose, handleClick }) => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -20,13 +22,11 @@ const Body = ({ handleClose, handleClick }) => {
   const registerUser = async () => {
     try {
       const newUser = { email, fullName, password, passwordCheck };
-      await Axios.post("http://localhost:3001/users/signup", newUser).then(
-        (res) => {
-          if (res.data.msg) {
-            setRegisterStatus(res.data.msg);
-          }
+      await Axios.post(`/users/signup`, newUser).then((res) => {
+        if (res.data.msg) {
+          setRegisterStatus(res.data.msg);
         }
-      );
+      });
     } catch (err) {
       err.response.data.msg && setRegisterStatus(err.response.data.msg);
     }
@@ -127,7 +127,7 @@ const Body2 = ({ handleClose, handleClick }) => {
 
   const login = async (e) => {
     try {
-      const loginRes = await Axios.post("http://localhost:3001/users/login", {
+      const loginRes = await Axios.post(`/users/login`, {
         email: email,
         password: password,
       });

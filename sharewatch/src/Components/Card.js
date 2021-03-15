@@ -76,18 +76,16 @@ export default function StockCard({ query }) {
 
     if (favourite === false) {
       setFavourite(true);
-      await Axios.post("http://localhost:3001/stocks/favourites", data).then(
-        (res) => {
-          if (res.data.msg) {
-            // setStatus(res.data.msg);
-            console.log(res.data.msg);
-          }
+      await Axios.post("/stocks/favourites", data).then((res) => {
+        if (res.data.msg) {
+          // setStatus(res.data.msg);
+          console.log(res.data.msg);
         }
-      );
+      });
     } else if (favourite === true) {
       setFavourite(false);
       console.log(data);
-      await Axios.delete("http://localhost:3001/stocks/delete", {
+      await Axios.delete("/stocks/delete", {
         data: data,
       }).then((res) => {
         if (res.data.msg) {
@@ -157,10 +155,7 @@ export default function StockCard({ query }) {
       let data = { id, ticker };
 
       try {
-        await Axios.post(
-          "http://localhost:3001/stocks/checkfavourite",
-          data
-        ).then((res) => {
+        await Axios.post("/stocks/checkfavourite", data).then((res) => {
           if (res.data.msg) {
             console.log(res.data.msg);
             setFavourite(true);

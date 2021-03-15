@@ -7,6 +7,7 @@ import dotenv from "dotenv";
 import Axios from "axios";
 import DashboardCard from "../Components/DashboardCard";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+const port = process.env.PORT || 3001;
 
 dotenv.config();
 
@@ -18,24 +19,22 @@ const Dashboard = () => {
     let id = user.user.id;
     let data = { id };
 
-    await Axios.post("http://localhost:3001/stocks/allfavourites", data).then(
-      (res) => {
-        if (res.data.msg) {
-          console.log("res", res);
-          console.log(res.data.msg);
-          let favs = res.data.favourites;
-          console.log(favs);
-          let stockArray = [];
-          for (let i = 0; i < favs.length; i++) {
-            stockArray.push({
-              ticker: favs[i].ticker,
-              code: favs[i].uniqueCode,
-            });
-          }
-          setFollowedStocks([...stockArray]);
+    await Axios.post(`/stocks/allfavourites`, data).then((res) => {
+      if (res.data.msg) {
+        console.log("res", res);
+        console.log(res.data.msg);
+        let favs = res.data.favourites;
+        console.log(favs);
+        let stockArray = [];
+        for (let i = 0; i < favs.length; i++) {
+          stockArray.push({
+            ticker: favs[i].ticker,
+            code: favs[i].uniqueCode,
+          });
         }
+        setFollowedStocks([...stockArray]);
       }
-    );
+    });
   };
 
   useEffect(() => {
