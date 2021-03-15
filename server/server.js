@@ -6,6 +6,7 @@ const path = require("path");
 const dotenv = require("dotenv");
 const routesUrls = require("./routes/userRouter");
 const stockRouteUrls = require("./routes/stockRouter");
+const apiRoutes = require("./routes/apiRouter");
 const mongoose = require("mongoose");
 
 dotenv.config();
@@ -23,6 +24,7 @@ app.use(express.json()); //activated bodyparser in our application.
 app.use(cors()); //Allows information be sent cross platform.
 app.use("/users", routesUrls); //appends route names to /app in url e.g. homepage/app/signin.
 app.use("/stocks", stockRouteUrls);
+app.use("/api", apiRoutes);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../sharewatch/build")));
