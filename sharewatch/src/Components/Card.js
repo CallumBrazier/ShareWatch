@@ -101,51 +101,59 @@ export default function StockCard({ query }) {
     async function getNews() {
       const d = new Date();
       const dateto = d.toISOString().split("T")[0];
-      const datefrom = d.setFullYear(d.getFullYear() + 1);
-      console.log(d, dateto, datefrom);
+      const startdate = d.setFullYear(d.getFullYear() - 1);
+      const date = new Date(startdate);
+      const datefrom = date.toISOString().split("T")[0];
+      let data = { dateto, datefrom, query };
 
-      await fetch(
-        `https://finnhub.io/api/v1/company-news?symbol=${query}&from=${datefrom}&to=${dateto}&token=${process.env.REACT_APP_FH_API_KEY}`
-      )
-        .then((response) => response.json())
-        .then((stockNews) => {
-          setNewsData(stockNews);
-          console.log("FH-News-Info", stockNews);
-        });
+      await Axios.post("/api/companynews", data).then((res) => {
+        console.log("date-info", res);
+        if (res.data.msg) {
+          return console.log("news error message", res.data.msg);
+        } else {
+          setNewsData(res.data.data);
+          console.log("FH-News-Info", res.data.data);
+        }
+      });
     }
 
     async function getStock() {
-      await fetch(
-        `https://finnhub.io/api/v1/quote?symbol=${query}&token=${process.env.REACT_APP_FH_API_KEY}`
-      )
-        .then((response) => response.json())
-        .then((stockInfo) => {
-          console.log(query);
-          setStock(stockInfo);
-          console.log("FH-Stock-Info", stockInfo);
-        });
+      let data = { query };
+      await Axios.post("/api/stockinfo", data).then((res) => {
+        console.log("stock-info", res);
+        if (res.data.msg) {
+          return console.log("stock info error", res.data.msg);
+        } else {
+          setStock(res.data.data);
+          console.log("FH-Stock-Info", res.data.data);
+        }
+      });
     }
 
     async function getMetrics() {
-      await fetch(
-        `https://finnhub.io/api/v1/stock/metric?symbol=${query}&token=${process.env.REACT_APP_FH_API_KEY}`
-      )
-        .then((response) => response.json())
-        .then((metricsInfo) => {
-          setMetrics(metricsInfo);
-          console.log("FH-Metrics-Info", metricsInfo);
-        });
+      let data = { query };
+      await Axios.post("/api/metrics", data).then((res) => {
+        console.log("metrics", res);
+        if (res.data.msg) {
+          return console.log("metric info error", res.data.msg);
+        } else {
+          setMetrics(res.data.data);
+          console.log("FH-Metrics-Info", res.data.data);
+        }
+      });
     }
 
     async function getCompany() {
-      await fetch(
-        `https://finnhub.io/api/v1/stock/profile2?symbol=${query}&token=${process.env.REACT_APP_FH_API_KEY}`
-      )
-        .then((response) => response.json())
-        .then((companyInfo) => {
-          setCompany(companyInfo);
-          console.log("FH-Company-Info", companyInfo);
-        });
+      let data = { query };
+      await Axios.post("/api/companydetails", data).then((res) => {
+        console.log("company details", res);
+        if (res.data.msg) {
+          return console.log("company info error", res.data.msg);
+        } else {
+          setCompany(res.data.data);
+          console.log("FH-Company-Info", res.data.data);
+        }
+      });
     }
 
     async function getFavourite() {
@@ -177,16 +185,19 @@ export default function StockCard({ query }) {
 
   useEffect(() => {
     const currentdate = Math.round(new Date().getTime() / 1000);
-    const daybefore = currentdate - 86400;
+    const date = new Date();
+    const daybefore = Math.round(date.setDate(date.getDate() - 1) / 1000);
     const int = "1";
+
     async function firstAPICall() {
-      await fetch(
-        `https://finnhub.io/api/v1/stock/candle?symbol=${query}&resolution=${int}&from=${daybefore}&to=${currentdate}&token=${process.env.REACT_APP_FH_API_KEY}`
-      )
-        .then((response) => response.json())
-        .then((candleData) => {
-          setStockHistory(candleData.c);
-          setGraphData(candleData.t);
+      let data = { currentdate, date, daybefore, int, query };
+      await Axios.post("/api/candles", data).then((res) => {
+        console.log("candle details", res);
+        if (res.data.msg) {
+          return console.log("candle info error", res.data.msg);
+        } else {
+          setStockHistory(res.data.data.c);
+          setGraphData(res.data.data.t);
           setTimeData(
             graphData &&
               graphData.map((data) => {
@@ -194,8 +205,8 @@ export default function StockCard({ query }) {
                 return date.toLocaleString();
               })
           );
-          console.log("firstAPICall time data", timeData);
-        });
+        }
+      });
     }
     firstAPICall();
   }, []);
@@ -235,13 +246,14 @@ export default function StockCard({ query }) {
     }
 
     async function getStockHistory() {
-      await fetch(
-        `https://finnhub.io/api/v1/stock/candle?symbol=${query}&resolution=${interval}&from=${unixtime}&to=${currentdate}&token=${process.env.REACT_APP_FH_API_KEY}`
-      )
-        .then((response) => response.json())
-        .then((candleData) => {
-          setStockHistory(candleData.c);
-          setGraphData(candleData.t);
+      let data = { query, interval, unixtime, currentdate };
+      await Axios.post("/api/stockhistory", data).then((res) => {
+        console.log("stock history details", res);
+        if (res.data.msg) {
+          return console.log("company info error", res.data.msg);
+        } else {
+          setStockHistory(res.data.data.c);
+          setGraphData(res.data.data.t);
           setTimeData(
             graphData &&
               graphData.map((data) => {
@@ -251,7 +263,8 @@ export default function StockCard({ query }) {
           );
           console.log("FH-Stock-History", stockHistory);
           console.log("FH-GraphData", graphData);
-        });
+        }
+      });
     }
     getStockHistory();
   }, [timeframe]);
