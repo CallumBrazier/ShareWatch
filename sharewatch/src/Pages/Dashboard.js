@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import { BrowserRouter as Router, NavLink } from "react-router-dom";
+import { BrowserRouter as Router, NavLink, useHistory } from "react-router-dom";
+
 import Navbar from "../Components/Navbar";
 import "./CSS/Dashboard.css";
 import UserContext from "../Context/UserContext";
@@ -14,31 +15,37 @@ dotenv.config();
 const Dashboard = () => {
   const { user } = useContext(UserContext);
   const [followedStocks, setFollowedStocks] = useState([]);
+  const history = useHistory();
 
   const favouriteStocks = async () => {
-    let id = user.user.id;
-    let data = { id };
+    if (user.user) {
+      let id = user.user.id;
+      let data = { id };
 
-    await Axios.post(`/stocks/allfavourites`, data).then((res) => {
-      if (res.data.msg) {
-        console.log("res", res);
-        console.log(res.data.msg);
-        let favs = res.data.favourites;
-        console.log(favs);
-        let stockArray = [];
-        for (let i = 0; i < favs.length; i++) {
-          stockArray.push({
-            ticker: favs[i].ticker,
-            code: favs[i].uniqueCode,
-          });
+      await Axios.post(`/stocks/allfavourites`, data).then((res) => {
+        if (res.data.msg) {
+          console.log("res", res);
+          console.log(res.data.msg);
+          let favs = res.data.favourites;
+          console.log(favs);
+          let stockArray = [];
+          for (let i = 0; i < favs.length; i++) {
+            stockArray.push({
+              ticker: favs[i].ticker,
+              code: favs[i].uniqueCode,
+            });
+          }
+          setFollowedStocks([...stockArray]);
         }
-        setFollowedStocks([...stockArray]);
-      }
-    });
+      });
+    }
   };
 
   useEffect(() => {
     favouriteStocks();
+    if (user.user === undefined) {
+      history.push("/home");
+    }
   }, []);
 
   const handleOnDragEnd = (result) => {
@@ -57,7 +64,7 @@ const Dashboard = () => {
         <Navbar />
         <div className="header glass">
           <div className="account-title">
-            <h1>Welcome, {user.user.fullName}!</h1>
+            <h1>{user.user ? `Welcome, ${user.user.fullName}!` : null}</h1>
           </div>
           <DragDropContext onDragEnd={handleOnDragEnd}>
             <Droppable droppableId="characters">
