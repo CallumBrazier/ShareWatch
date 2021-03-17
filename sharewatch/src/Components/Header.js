@@ -15,6 +15,7 @@ export default function Header({ handleOpen }) {
           <p className="header-para">
             1. Create an
             <a className="clickable-link" onClick={handleOpen}>
+              {" "}
               account
             </a>
             !

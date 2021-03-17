@@ -37,7 +37,7 @@ export default function Search() {
               <input
                 type="text"
                 value={search}
-                placeholder="Type in security name"
+                placeholder="Type in company ticker"
                 onChange={getQuery}
                 className="searchbar"
               ></input>

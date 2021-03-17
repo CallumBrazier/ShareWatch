@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import Axios from "axios";
+import { useHistory } from "react-router-dom";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -60,6 +61,8 @@ export default function StockCard({ query }) {
   const [graphData, setGraphData] = useState([]);
   const [timeData, setTimeData] = useState([]);
   const [newsData, setNewsData] = useState([]);
+  const [message, setMessage] = useState("");
+  const history = useHistory();
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -77,8 +80,7 @@ export default function StockCard({ query }) {
     if (favourite === false) {
       setFavourite(true);
       await Axios.post("/stocks/favourites", data).then((res) => {
-        if (res.data.msg) {
-          // setStatus(res.data.msg);
+        if (res.data.data.msg) {
           console.log(res.data.msg);
         }
       });
@@ -90,8 +92,6 @@ export default function StockCard({ query }) {
       }).then((res) => {
         if (res.data.msg) {
           console.log(res.data.msg);
-
-          // setStatus(res.data.msg);
         }
       });
     }
@@ -108,8 +108,10 @@ export default function StockCard({ query }) {
 
       await Axios.post("/api/companynews", data).then((res) => {
         console.log("date-info", res);
-        if (res.data.msg) {
-          return console.log("news error message", res.data.msg);
+        if (res.data.error) {
+          setMessage(res.data.data.error);
+          console.log("news error data", res.data.data);
+          console.log("news error message", res.data.msg);
         } else {
           setNewsData(res.data.data);
           console.log("FH-News-Info", res.data.data);
@@ -134,10 +136,11 @@ export default function StockCard({ query }) {
       let data = { query };
       await Axios.post("/api/metrics", data).then((res) => {
         console.log("metrics", res);
-        if (res.data.msg) {
-          return console.log("metric info error", res.data.msg);
+        if (Object.keys(res.data.data.metric).length === 0) {
+          setMessage(`${query} is not a valid ticker`);
         } else {
           setMetrics(res.data.data);
+          setMessage("");
           console.log("FH-Metrics-Info", res.data.data);
         }
       });
@@ -157,21 +160,23 @@ export default function StockCard({ query }) {
     }
 
     async function getFavourite() {
-      let id = user.user.id;
-      let ticker = query;
-      console.log(id, ticker);
-      let data = { id, ticker };
+      if (user.user) {
+        let id = user.user.id;
+        let ticker = query;
+        console.log(id, ticker);
+        let data = { id, ticker };
 
-      try {
-        await Axios.post("/stocks/checkfavourite", data).then((res) => {
-          if (res.data.msg) {
-            console.log(res.data.msg);
-            setFavourite(true);
-          }
-        });
-      } catch (err) {
-        console.log("Not yet favourited");
-        setFavourite(false);
+        try {
+          await Axios.post("/stocks/checkfavourite", data).then((res) => {
+            if (res.data.msg) {
+              console.log(res.data.msg);
+              setFavourite(true);
+            }
+          });
+        } catch (err) {
+          console.log("Not yet favourited");
+          setFavourite(false);
+        }
       }
     }
 
@@ -209,6 +214,10 @@ export default function StockCard({ query }) {
       });
     }
     firstAPICall();
+
+    if (user.user === undefined) {
+      history.push("/home");
+    }
   }, []);
 
   useEffect(() => {
@@ -271,6 +280,7 @@ export default function StockCard({ query }) {
 
   return (
     <div className="stockcard">
+      <h3 className="error-message">{message}</h3>
       <Card className={classes.root}>
         <CardContent>
           <div className="stockcard-top">
@@ -351,7 +361,9 @@ export default function StockCard({ query }) {
 
               <p className="stockcard-value-header">52 Week Range</p>
               <p className="stockcard-value">
-                {metrics && metrics.metric
+                {metrics &&
+                metrics.metric["52WeekLow"] &&
+                metrics.metric["52WeekHigh"]
                   ? `${metrics.metric["52WeekLow"].toFixed(2)}-${metrics.metric[
                       "52WeekHigh"
                     ].toFixed(2)}`
@@ -469,27 +481,28 @@ export default function StockCard({ query }) {
         <Collapse in={newsexpanded} timeout="auto" unmountOnExit>
           <CardContent>
             <div>
-              {newsData.slice(0, 3).map((data) => {
-                console.log(data);
-                return (
-                  <div>
-                    <a className="news-link" href={data.url}>
-                      <h2 className="news-headline">{data.headline}</h2>
-                    </a>
-                    <div className="news-summary">
-                      <img
-                        src={data.image}
-                        alt="article image"
-                        className="news-image"
-                      />
+              {newsData &&
+                newsData.slice(0, 3).map((data) => {
+                  console.log(data);
+                  return (
+                    <div>
+                      <a className="news-link" href={data.url}>
+                        <h2 className="news-headline">{data.headline}</h2>
+                      </a>
+                      <div className="news-summary">
+                        <img
+                          src={data.image}
+                          alt="article image"
+                          className="news-image"
+                        />
 
-                      {/* <h3>{data.datetime}</h3> */}
+                        {/* <h3>{data.datetime}</h3> */}
 
-                      <p className="news-info">{data.summary}</p>
+                        <p className="news-info">{data.summary}</p>
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
             </div>
           </CardContent>
         </Collapse>

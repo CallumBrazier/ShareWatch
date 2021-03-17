@@ -184,3 +184,8 @@
 .news-button {
   align-items: flex-end;
 }
+
+.error-message {
+  text-align: center;
+  margin: -1em 0 1em 0;
+}
