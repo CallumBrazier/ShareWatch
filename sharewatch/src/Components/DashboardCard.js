@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import Axios from "axios";
+import { useHistory } from "react-router-dom";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -60,6 +61,7 @@ export default function DashboardCard({ query }) {
   const [graphData, setGraphData] = useState([]);
   const [timeData, setTimeData] = useState([]);
   const [newsData, setNewsData] = useState([]);
+  const history = useHistory();
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -209,6 +211,10 @@ export default function DashboardCard({ query }) {
       });
     }
     firstAPICall();
+
+    if (user.user === undefined) {
+      history.push("/home");
+    }
   }, []);
 
   useEffect(() => {
